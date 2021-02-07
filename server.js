@@ -5,7 +5,9 @@ const path = require('path')
 const app = express()
 
 //here we are configuring dist to serve app files
-app.use(express.static(path.join(__dirname, "client", "dist")))
+app.use(express.static(path.join(__dirname, 'dist/')));
+
+
 
 // this * route is to serve project on different page routes except root `/`
 app.get(/.*/, function (req, res) {
