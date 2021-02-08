@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="row">
       <div class="card col-sm m-3 border" style="background-color: white">
-        <div class="p-2 row rounded bg-primary shadow text-white">
+        <div class="p-1 row rounded bg-primary shadow text-white">
           <div class="col-sm mt-2">
             <div class="text">
               <h5><b>Expenditure</b></h5>
@@ -42,7 +42,7 @@
       </div>
 
       <div class="card col-sm m-3 border" style="background-color: white">
-        <div class="p-2 row rounded bg-primary shadow text-white">
+        <div class="p-1 row rounded bg-primary shadow text-white">
           <div class="col-sm mt-2">
             <div class="text">
               <h5><b>Product Count</b></h5>
@@ -81,7 +81,7 @@
         </div>
       </div>
       <div class="card col-sm m-3 border" style="background-color: white">
-        <div class="p-2 row rounded bg-primary shadow text-white">
+        <div class="p-1 row rounded bg-primary shadow text-white">
           <div class="col-sm mt-2">
             <div class="text">
               <h5><b>Sales / Collection</b></h5>
@@ -201,7 +201,7 @@ export default {
               this.expOthers,
             ],
             label: "Total Expenditure - " + this.expTotal,
-            barThickness: 30,
+            barThickness: 20,
             borderWidth: 2,
             backgroundColor: ["pink", "#befa6b", "#f3c87a", "#8edbf5"],
           },
