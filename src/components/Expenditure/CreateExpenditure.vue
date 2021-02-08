@@ -186,6 +186,12 @@ export default {
 
   created() {
     this.exp_MonthYear = this.$store.state.Expenditure.expenditureDate;
+    if (this.exp_MonthYear.length < 7) {
+      this.exp_MonthYear =
+        this.exp_MonthYear.substring(0, 5) +
+        "0" +
+        this.exp_MonthYear.substring(5, 7);
+    }
     if (
       JSON.parse(this.$store.state.Expenditure.expenditureDetails).length > 0
     ) {

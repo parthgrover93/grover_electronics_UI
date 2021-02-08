@@ -298,7 +298,7 @@ export default {
           "DownPayment",
           "EMI",
           "Collected",
-          "Left"
+          "Left",
         ],
         datasets: [
           {
@@ -333,8 +333,13 @@ export default {
   },
   created() {
     // ========= Expenditure=================
-
     this.exp_MonthYear = this.$store.state.Expenditure.expenditureDate;
+    if (this.exp_MonthYear.length < 7) {
+      this.exp_MonthYear =
+        this.exp_MonthYear.substring(0, 5) +
+        "0" +
+        this.exp_MonthYear.substring(5, 7);
+    }
     var expenditure = [];
     expenditure = JSON.parse(this.$store.state.Expenditure.expenditureDetails);
 
@@ -358,6 +363,12 @@ export default {
 
     //=============== Product Count=======================
     this.product_MonthYear = this.$store.state.Customer.productDate;
+    if (this.product_MonthYear.length < 7) {
+      this.product_MonthYear =
+        this.product_MonthYear.substring(0, 5) +
+        "0" +
+        this.product_MonthYear.substring(5, 7);
+    }
     var productList = [];
     productList = JSON.parse(this.$store.state.Customer.customerDetailsProduct);
 
@@ -376,6 +387,12 @@ export default {
 
     //===========Total Collection===================
     this.collection_MonthYear = this.$store.state.Customer.salesDate;
+    if (this.collection_MonthYear.length < 7) {
+      this.collection_MonthYear =
+        this.collection_MonthYear.substring(0, 5) +
+        "0" +
+        this.collection_MonthYear.substring(5, 7);
+    }
     var customerList = [];
     customerList = JSON.parse(this.$store.state.Customer.customerDetailsSales);
     if (customerList && customerList.length > 0) {
