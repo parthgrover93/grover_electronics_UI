@@ -360,7 +360,6 @@ export default {
         this.expTotal += expenditure[i].expAmount;
       }
     }
-
     //=============== Product Count=======================
     this.product_MonthYear = this.$store.state.Customer.productDate;
     if (this.product_MonthYear.length < 7) {
@@ -411,6 +410,7 @@ export default {
         }
       }
     }
+
   },
 
   methods: {

@@ -32,6 +32,9 @@ export default {
   created() {
     var MonthYear =
       new Date().getFullYear() + "-" + (parseInt(new Date().getMonth()) + 1);
+    if (MonthYear.length < 7) {
+      MonthYear = MonthYear.substring(0, 5) + "0" + MonthYear.substring(5, 7);
+    }
     this.fetchExpenditure(MonthYear);
     this.fetchCustomerByMonth(MonthYear);
     this.fetchCustomerByMonthSales(MonthYear);
