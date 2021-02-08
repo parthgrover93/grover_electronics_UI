@@ -22,6 +22,10 @@ export default {
   created() {
     var expMonthYear =
       new Date().getFullYear() + "-" + (parseInt(new Date().getMonth()) + 1);
+    if (expMonthYear.length < 7) {
+      expMonthYear =
+        expMonthYear.substring(0, 5) + "0" + expMonthYear.substring(5, 7);
+    }
     this.fetchExpenditure(expMonthYear);
   },
 };

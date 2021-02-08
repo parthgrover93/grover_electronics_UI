@@ -25,10 +25,10 @@ const state = {
   activeCustomerDetails: null,
   inactiveCustomerDetails: null,
   emiDetails: null,
-  customerDetailsProduct:null,
-  customerDetailsSales:null,
-  productDate:null,
-  salesDate:null,
+  customerDetailsProduct: null,
+  customerDetailsSales: null,
+  productDate: null,
+  salesDate: null,
 };
 
 const getters = {
@@ -44,16 +44,16 @@ const getters = {
   getEmiDetails: function(state) {
     return state.emiDetails;
   },
-  getCustomerDetailsProduct:function(state) {
+  getCustomerDetailsProduct: function(state) {
     return state.customerDetailsProduct;
   },
-  getProductDate:function(state) {
+  getProductDate: function(state) {
     return state.productDate;
   },
-  getCustomerDetailsSales:function(state) {
+  getCustomerDetailsSales: function(state) {
     return state.customerDetailsSales;
   },
-  getSalesDate:function(state) {
+  getSalesDate: function(state) {
     return state.salesDate;
   },
 };
@@ -94,7 +94,7 @@ const actions = {
       .createCustomer(request, rootState.Login.token)
       .then((response) => {
         if (response.status === 200 && response.data) {
-          // commit("setCustomerDetails", JSON.stringify(response.data))
+          router.push("/customerList").catch(() => {});
           Toast.showToast("Customer Information Saved Successfully", "S");
         } else {
           Toast.showToast("Something went wrong", "E");
@@ -106,7 +106,7 @@ const actions = {
   },
 
   async fetchAllActiveCustomer({ commit, dispatch, rootState }) {
-    commit("setActiveCustomerDetails", JSON.stringify([]));
+    commit("setActiveCustomerDetails", null);
     await dashboardApi
       .fetchAllActiveCustomer(rootState.Login.token)
       .then((response) => {
@@ -141,8 +141,10 @@ const actions = {
               if (response.data[i].customerProductsList) {
                 response.data[i].customerProductsList =
                   response.data[i].customerProductsList +
-                  " - " + "( " +
-                  response.data[i].customerProductTotalCount +" )";
+                  " - " +
+                  "( " +
+                  response.data[i].customerProductTotalCount +
+                  " )";
               }
             }
           }
@@ -157,7 +159,7 @@ const actions = {
   },
 
   async fetchAllInActiveCustomer({ commit, dispatch, rootState }) {
-    commit("setInActiveCustomerDetails", JSON.stringify([]));
+    commit("setInActiveCustomerDetails", null);
     await dashboardApi
       .fetchAllInActiveCustomer(rootState.Login.token)
       .then((response) => {
@@ -290,7 +292,10 @@ const actions = {
       });
   },
 
-  async fetchCustomerByMonth({ commit, dispatch, rootState }, productMonthYear) {
+  async fetchCustomerByMonth(
+    { commit, dispatch, rootState },
+    productMonthYear
+  ) {
     dispatch("setProductDate", productMonthYear);
     commit("setCustomerDetailsProduct", null);
     await dashboardApi
@@ -307,12 +312,14 @@ const actions = {
       });
   },
 
-  async setProductDate({commit},productMonthYear)
-  {
-    commit("setProductDate",productMonthYear)
+  async setProductDate({ commit }, productMonthYear) {
+    commit("setProductDate", productMonthYear);
   },
 
-  async fetchCustomerByMonthSales({ commit, dispatch, rootState }, productMonthYear) {
+  async fetchCustomerByMonthSales(
+    { commit, dispatch, rootState },
+    productMonthYear
+  ) {
     dispatch("setSalesDate", productMonthYear);
     commit("setCustomerDetailsSales", null);
     await dashboardApi
@@ -329,11 +336,9 @@ const actions = {
       });
   },
 
-  async setSalesDate({commit},productMonthYear)
-  {
-    commit("setSalesDate",productMonthYear)
+  async setSalesDate({ commit }, productMonthYear) {
+    commit("setSalesDate", productMonthYear);
   },
-
 };
 
 export default {

@@ -12,7 +12,7 @@
       "
     >
       <div class="panel panel-default">
-        <div style="font-size:30px;color:#1e90ff"><b>
+        <div style="font-size:30px;color:#1e90ff;font-family:Serif"><b>
          Grover Electronics</b>
         </div>
 
@@ -66,21 +66,13 @@
         </div>
         <div class="panel-heading">
           <div class="row">
-            <div class="col-auto">
+            <!-- <div class="col-auto">
               <label class="left-adjustment-checkbox style-label-checkbox">
-                <!-- <input
-                  name="remember"
-                  class="left-adjustment-checkbox"
-                  type="checkbox"
-                  value="Remember Me"
-                  style="margin:3px;"
-                />Remember Me? -->
-                <!-- | -->
                 <a @click="forgotPassword" style="cursor: pointer"
                   >Forgot your password?</a
                 >
               </label>
-            </div>
+            </div> -->
             <div class="col-md-12 mt-3" style="text-align: left">
               <button
                 type="button"

@@ -3,7 +3,7 @@
     class="container-fluid"
     v-if="JSON.parse(this.$store.state.Expenditure.expenditureDetails)"
   >
-    <div class="p-2 mt-2 mr-1 rounded bg-primary shadow text-white">
+    <div class="p-3 mt-2 mr-1 rounded bg-primary shadow text-white">
       <div class="form-row">
         <div class="col-sm mt-2">
           <div class="text">
@@ -186,6 +186,7 @@ export default {
 
   created() {
     this.exp_MonthYear = this.$store.state.Expenditure.expenditureDate;
+    
     if (this.exp_MonthYear.length < 7) {
       this.exp_MonthYear =
         this.exp_MonthYear.substring(0, 5) +

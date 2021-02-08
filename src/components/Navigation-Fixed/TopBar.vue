@@ -52,6 +52,19 @@
             ><b>Expenditure</b></router-link
           >
         </li>
+ 
+          <a
+              class="dropdown-item mt-1"
+              @click="doLogout"
+              style="cursor: pointer; color: #007bff"
+            >
+              <i
+                class="fa fa-sign-out fa2"
+                aria-hidden="true"
+                style="padding-right: 5px"
+              ></i
+              ><b>Logout</b>
+            </a>
       </ul>
       <form class="form-inline p-2">
         <li class="nav-item dropdown" style="list-style: none">
@@ -90,7 +103,7 @@
               <i class="fa fa-pencil-square-o mr-1" aria-hidden="true"></i
               >Change Password
             </a>
-            <a
+            <!-- <a
               class="dropdown-item"
               @click="doLogout"
               style="cursor: pointer; color: #007bff"
@@ -101,7 +114,7 @@
                 style="padding-right: 5px"
               ></i
               >Logout
-            </a>
+            </a> -->
           </div>
         </li>
       </form>

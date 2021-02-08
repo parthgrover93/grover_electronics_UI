@@ -8,8 +8,7 @@
           </div>
         </div>
         <div class="col-md-7 d-flex flex-row-reverse">
-          <i
-            >Required fields are marked with an asterisk ( * ) </i>
+          <i>Required fields are marked with an asterisk ( * ) </i>
         </div>
       </div>
     </div>
@@ -98,20 +97,18 @@ export default {
       ) {
         if (
           !this.model.customerEmiStatus &&
-          this.model.customerPaymentSellingPrice ===
-            this.model.customerPaymentDownPayment
+          parseInt(this.model.customerPaymentSellingPrice) ===
+            parseInt(this.model.customerPaymentDownPayment)
         ) {
           this.model.customerProductsList = this.model.customerProductsList.toString();
           this.model.customerDefaulter = false;
+          this.model.customerStatus=false
           this.createCustomer(this.model);
           this.$router.push("/");
-        } else {
-          Toast.showToast(
-            "If no EMI, then selling price should be equal to Down Payment",
-            "E"
-          );
-        }
-        if (this.model.customerEmiStatus && this.model.customerEmiMonths) {
+        } else if (
+          this.model.customerEmiStatus &&
+          this.model.customerEmiMonths
+        ) {
           if (
             parseInt(this.model.customerPaymentSellingPrice) >
             parseInt(this.model.customerPaymentDownPayment)
@@ -122,10 +119,24 @@ export default {
             this.$router.push("/");
           } else {
             Toast.showToast(
-              "Down Payment cannot be greater than Selling Price",
+              "Selling price cannot be greater than Down Payment",
               "E"
             );
           }
+        } else if (
+          !this.model.customerEmiStatus &&
+          parseInt(this.model.customerPaymentSellingPrice) >
+            parseInt(this.model.customerPaymentDownPayment)
+        ) {
+          Toast.showToast(
+            "If no EMI, down payment should be equal to Selling Price",
+            "E"
+          );
+        } else {
+          Toast.showToast(
+            "Selling price cannot be greater than Down Payment",
+            "E"
+          );
         }
       } else {
         Toast.showToast(

@@ -546,8 +546,8 @@ export default {
               disabled(model) {
                 if (
                   !model.customerPaymentDownPayment ||
-                  model.customerPaymentSellingPrice ===
-                    model.customerPaymentDownPayment ||
+                  parseInt(model.customerPaymentSellingPrice) <=
+                    parseInt(model.customerPaymentDownPayment) ||
                   disablePayment
                 ) {
                   return true;
@@ -820,7 +820,7 @@ export default {
             {
               type: "input",
               inputType: "text",
-              label: "Guraantor Mobile No",
+              label: "Gurantor Mobile No",
               model: "customerGurantorMobileNo",
               placeholder: "Enter Gurantor Mobile No",
               required: true,
