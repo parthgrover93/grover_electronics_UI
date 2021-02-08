@@ -13,7 +13,7 @@
               </h4>
             </div>
           </div>
-          <div class="col-sm row">
+          <div class="col-sm">
             Month
             <div>
               <input
@@ -53,7 +53,7 @@
               </h4>
             </div>
           </div>
-          <div class="col-sm row">
+          <div class="col-sm">
             Month
             <div>
               <input
@@ -92,7 +92,7 @@
               </h4>
             </div>
           </div>
-          <div class="col-sm row">
+          <div class="col-sm">
             Month
             <div>
               <input
@@ -201,7 +201,7 @@ export default {
               this.expOthers,
             ],
             label: "Total Expenditure - " + this.expTotal,
-            barThickness: 40,
+            barThickness: 30,
             borderWidth: 2,
             backgroundColor: ["pink", "#befa6b", "#f3c87a", "#8edbf5"],
           },
@@ -241,7 +241,7 @@ export default {
               "pink",
               "#b290f3",
             ],
-            borderWidth: 3,
+            borderWidth: 2,
           },
         ],
       },
@@ -304,7 +304,7 @@ export default {
           {
             label: "Total Sales",
             borderWidth: 2,
-            barThickness: 40,
+            barThickness: 30,
             data: [
               this.totalSellingprice,
               this.totalPrice,
