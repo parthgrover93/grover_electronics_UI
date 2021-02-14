@@ -1,14 +1,29 @@
 <template>
   <div class="container-fluid">
-    <div class="p-3 mt-2 mr-1 rounded bg-primary shadow text-white">
+    <div class="p-2 mt-2 mr-1 rounded bg-primary shadow text-white">
       <div class="form-row">
-        <div class="col-md-5">
+        <div class="col-md mt-2">
           <div class="text">
-            <h5><b>Create Customer</b></h5>
+            <h5><b>Create Customer </b></h5>
           </div>
         </div>
-        <div class="col-md-7 d-flex flex-row-reverse">
-          <i>Required fields are marked with an asterisk ( * ) </i>
+
+            <div class="col-md mt-2">
+            <i>Required fields are marked with ( * )</i>
+            </div>
+        <div class="col-md row">
+          <pre
+            style="color: white"
+            class="row mt-2"
+          ><h5><b>   Invoice: * </b></h5></pre>
+          <input
+            class="form-control ml-3 mt-2 col-md-7"
+            type="text"
+            id="example-month-input"
+            v-model="customerBillNumber"
+            v-on:input="billValue"
+            maxlength="64"
+          />
         </div>
       </div>
     </div>
@@ -52,6 +67,7 @@ export default {
   components: {},
   data() {
     return {
+      customerBillNumber: "",
       model: {
         customerEmiStatus: false,
         customerEmiEndDate: null,
@@ -70,6 +86,7 @@ export default {
         customerOtherCount: 0,
         customerFanCount: 0,
         customerStatus: true,
+        customerBillNumber: "",
       },
       schema: CreateEditCustomerSchema.getSchemaData(false),
       formOptions: {
@@ -77,8 +94,22 @@ export default {
       },
     };
   },
+
   methods: {
     ...mapActions(["createCustomer"]),
+    billValue() {
+      var s = this.customerBillNumber;
+      var res = s.replace(/\D+/g, "").replace(/^(\d{13}).*/, "$1");
+      this.customerBillNumber = res;
+      this.model.customerBillNumber = this.customerBillNumber;
+    },
+
+    limitNPI() {
+      var s = this.customerBillNumber;
+      var res = s.replace(/\D+/g, "").replace(/^(\d{13}).*/, "$1");
+      this.customerBillNumber = res;
+    },
+
     doCreateCustomer: function (e) {
       e.preventDefault();
       if (
@@ -93,7 +124,8 @@ export default {
         this.model.customerGuarantorName &&
         this.model.customerGurantorAddress &&
         this.model.customerGurantorZipcode &&
-        this.model.customerGurantorMobileNo
+        this.model.customerGurantorMobileNo &&
+        this.model.customerBillNumber
       ) {
         if (
           !this.model.customerEmiStatus &&
@@ -102,9 +134,9 @@ export default {
         ) {
           this.model.customerProductsList = this.model.customerProductsList.toString();
           this.model.customerDefaulter = false;
-          this.model.customerStatus=false
+          this.model.customerStatus = false;
+
           this.createCustomer(this.model);
-          this.$router.push("/");
         } else if (
           this.model.customerEmiStatus &&
           this.model.customerEmiMonths

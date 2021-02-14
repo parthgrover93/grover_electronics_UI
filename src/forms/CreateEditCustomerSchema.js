@@ -394,7 +394,7 @@ export default {
             {
               type: "label",
               styleClasses: "col-md-2 mt-4 ",
-              label: "Details related to amount",
+              label: "Details related to Payment",
             },
             {
               type: "input",
@@ -403,7 +403,7 @@ export default {
               model: "customerPaymentSellingPrice",
               placeholder: "Enter Selling Price",
               required: true,
-              styleClasses: "col-md-3",
+              styleClasses: "col-md-2",
               maxlength: 8,
               onChanged: function(value, model) {
                 if (model === this.model.customerPaymentDownPayment) {
@@ -446,7 +446,7 @@ export default {
               model: "customerPaymentDownPayment",
               placeholder: "Enter Down Payment",
               required: true,
-              styleClasses: "col-md-3 rows",
+              styleClasses: "col-md-2",
               maxlength: 8,
               onChanged: function(value, model) {
                 if (model === this.model.customerPaymentSellingPrice) {
@@ -456,6 +456,10 @@ export default {
                   this.model.customerEmiStatus = false;
                 } else {
                   this.model.customerPaymentTotalPrice = "";
+                }
+                if(parseInt(model)>parseInt(this.model.customerPaymentSellingPrice)){
+                  alert("Down Payment Cannot be greater than Selling Price")
+                  model=""
                 }
                 if (
                   model &&
@@ -486,12 +490,12 @@ export default {
             {
               type: "input",
               inputType: "number",
-              label: "Total Price",
+              label: "Total Price (without EMI)",
               model: "customerPaymentTotalPrice",
               placeholder: "Enter Total Price",
               required: true,
               disabled: true,
-              styleClasses: "col-md-3",
+              styleClasses: "col-md-2",
               maxlength: 25,
               visible(model) {
                 if (
@@ -512,7 +516,7 @@ export default {
               model: "customerPaymentTotalPrice",
               required: true,
               disabled: true,
-              styleClasses: "col-md-3",
+              styleClasses: "col-md-2",
               maxlength: 25,
               visible(model) {
                 if (
@@ -525,6 +529,21 @@ export default {
                 }
               },
             },
+            {
+              type: "input",
+              inputType: "text",
+              label: "Invoice",
+              model: "customerBillNumber",
+              required: true,
+              disabled:true,
+              styleClasses: "col-md-2",
+              maxlength: 25,
+              visible(model) {
+                if (model.customerBillNumber) {
+                  return true;
+                }
+              },
+            }
           ],
         },
         {

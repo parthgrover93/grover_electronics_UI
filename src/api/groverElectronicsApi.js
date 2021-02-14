@@ -1,6 +1,6 @@
 import axios from "axios";
-//const ROOT_URL = "http://localhost:8080/ge/api";
-const ROOT_URL = "https://ge-backend-deploy.herokuapp.com";
+const ROOT_URL = "http://localhost:8080/ge/api";
+//const ROOT_URL = "https://ge-backend-deploy.herokuapp.com";
 
 export default {
   login: function(request) {
@@ -9,6 +9,14 @@ export default {
 
   createCustomer: function(request, token) {
     return axios.post(`${ROOT_URL}/dashboard/customer/create`, request, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  },
+
+  updateCustomer: function(request, token) {
+    return axios.post(`${ROOT_URL}/dashboard/customer/update`, request, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

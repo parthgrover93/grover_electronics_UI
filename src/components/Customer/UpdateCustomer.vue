@@ -3,10 +3,7 @@
     v-if="JSON.parse(this.$store.state.Customer.customerDetails)"
     class="m-3 ml-4 mr-4"
   >
-    <div
-      class="card p-3"
-      style="background-color: #e6eefa; color: #4f8ff0"
-    >
+    <div class="card p-3" style="background-color: #e6eefa; color: #4f8ff0">
       <div class="row">
         <div class="form-group col-sm">
           <label for="exampleInputEmail1">Total Amount (to be Paid)</label>
@@ -163,6 +160,15 @@
       class="card p-3 mt-3"
       style="background-color: #e6eefa; color: #4f8ff0"
     >
+      <div style="display: flex; color: #222222; justify-content: flex-end">
+        <label class="mt-2 mr-1">Invoice</label>
+        <input
+          type="text"
+          class="form-control ml-1 col-md-2 mr-2"
+          v-model="customerBillNumber"
+          readonly
+        />
+      </div>
       <div>
         <form @submit.prevent="">
           <vue-form-generator
@@ -200,6 +206,8 @@ export default {
   },
   data() {
     return {
+      customerBillNumber: JSON.parse(this.$store.state.Customer.customerDetails)
+        .customerBillNumber,
       emiAmount: "",
       totalAmountPaid: 0,
       totalAmountLeft: 0,
@@ -233,7 +241,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["createCustomer", "createEMI"]),
+    ...mapActions(["updateCustomer", "createEMI"]),
 
     handleValidation(isValid) {
       this.isValidForm = isValid;
@@ -241,9 +249,33 @@ export default {
 
     doCreateCustomer: function (e) {
       e.preventDefault();
-      this.model.customerProductsList = this.model.customerProductsList.toString();
-      this.createCustomer(this.model);
-      this.$router.push("/");
+      if (
+        this.model.customerName &&
+        this.model.customerAddress &&
+        this.model.customerZipcode &&
+        this.model.customerMobileNo &&
+        this.model.customerGuarantorName &&
+        this.model.customerGurantorAddress &&
+        this.model.customerGurantorZipcode &&
+        this.model.customerGurantorMobileNo
+      ) {
+        var req = {
+          customerId: this.model.customerId,
+          customerAddress: this.model.customerAddress,
+          customerZipcode: this.model.customerZipcode,
+          customerMobileNo: this.model.customerMobileNo,
+          customerName: this.model.customerName,
+          customerAlternateNo: this.model.customerAlternateNo,
+          customerGuarantorName: this.model.customerGuarantorName,
+          customerGurantorAddress: this.model.customerGurantorAddress,
+          customerGurantorZipcode: this.model.customerGurantorZipcode,
+          customerGurantorMobileNo: this.model.customerGurantorMobileNo,
+          customerGurantorAlternateNo: this.model.customerGurantorAlternateNo,
+        };
+        this.updateCustomer(req);
+      } else {
+        Toast.showToast("Please fill all required Customer Details", "E");
+      }
     },
     submitEMI() {
       if (this.emiAmount && this.emiDateModel) {

@@ -105,6 +105,22 @@ const actions = {
       });
   },
 
+  async updateCustomer({ dispatch, rootState }, request) {
+    await dashboardApi
+      .updateCustomer(request, rootState.Login.token)
+      .then((response) => {
+        if (response.status === 200 && response.data) {
+          router.push("/customerList").catch(() => {});
+          Toast.showToast("Customer Information Updated Successfully", "S");
+        } else {
+          Toast.showToast("Something went wrong", "E");
+        }
+      })
+      .catch((err) => {
+        dispatch("handleException", err.response, { root: true });
+      });
+  },
+
   async fetchAllActiveCustomer({ commit, dispatch, rootState }) {
     commit("setActiveCustomerDetails", null);
     await dashboardApi
@@ -282,11 +298,6 @@ const actions = {
   async customerDefaulter({ dispatch, rootState }) {
     await dashboardApi
       .customerDefaulter(rootState.Login.token)
-      .then((response) => {
-        if (response.status === 200 && response.data) {
-          alert(1);
-        }
-      })
       .catch((err) => {
         dispatch("handleException", err.response, { root: true });
       });
