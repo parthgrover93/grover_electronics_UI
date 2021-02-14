@@ -1,6 +1,6 @@
 import axios from "axios";
-const ROOT_URL = "http://localhost:8080/ge/api";
-//const ROOT_URL = "https://ge-backend-deploy.herokuapp.com";
+//const ROOT_URL = "http://localhost:8080/ge/api";
+const ROOT_URL = "https://ge-backend-deploy.herokuapp.com";
 
 export default {
   login: function(request) {
