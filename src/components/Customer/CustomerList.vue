@@ -2,7 +2,9 @@
   <div
     v-if="
       JSON.parse(this.$store.state.Customer.activeCustomerDetails) &&
-      JSON.parse(this.$store.state.Customer.inactiveCustomerDetails)
+      JSON.parse(this.$store.state.Customer.inactiveCustomerDetails) &&
+      JSON.parse(this.$store.state.Customer.deletedCustomer)
+
     "
     class="adjust_div ml-3"
     style="overflow: hidden"
@@ -36,6 +38,9 @@
             <option value="Inactive" class="text-primary">
               Inactive Customer
             </option>
+            <option value="Deleted" class="text-primary">
+              Deleted Customer
+            </option>
           </select>
         </div>
       </div>
@@ -56,14 +61,22 @@
         styleClass="vgt-table striped condensed bordered pl-3"
       >
         <template slot="table-row" slot-scope="data">
-          <span style="font-size: 16px;">
+          <span style="font-size: 16px">
             {{ data.formattedRow[data.column.field] }}
           </span>
           <input
             type="button"
             value="View"
             @click="myfun(data)"
-            class="btn btn-sm bg-dark text-light rounded"
+            class="btn btn-sm bg-primary text-light rounded"
+            style="padding-left: 5px; padding-right: 5px"
+            v-if="data.column.field === 'btn'"
+          />
+          <input
+            type="button"
+            value="Delete"
+            @click="deleteFn(data)"
+            class="btn btn-sm bg-danger text-light rounded ml-2"
             style="padding-left: 5px; padding-right: 5px"
             v-if="data.column.field === 'btn'"
           />
@@ -102,7 +115,7 @@
         </template>
       </vue-good-table>
     </div>
-    <div v-else>
+    <div v-else-if="this.patientStatus === 'Inactive'">
       <vue-good-table
         :columns="columnsActive"
         :rows="JSON.parse(this.$store.state.Customer.inactiveCustomerDetails)"
@@ -122,14 +135,88 @@
           <span style="font-size: 16px; color: #222222">
             {{ data.formattedRow[data.column.field] }}
           </span>
-          <span style="font-size: 1px;">
+          <span style="font-size: 1px">
             {{ data.formattedRow[data.column.label] }}
           </span>
           <input
             type="button"
             value="View"
             @click="myfun(data)"
-            class="btn btn-sm btn-light bg-dark text-light rounded"
+            class="btn btn-sm bg-primary text-light rounded"
+            style="padding-left: 5px; padding-right: 5px"
+            v-if="data.column.field === 'btn'"
+          />
+          <input
+            type="button"
+            value="Delete"
+            @click="deleteFn(data)"
+            class="btn btn-sm bg-danger text-light rounded ml-2"
+            style="padding-left: 5px; padding-right: 5px"
+            v-if="data.column.field === 'btn' && data.row.customerDeleted"
+          />
+          <span v-if="data.column.field === 'customerEmiStatus'">
+            <i
+              v-if="data.row.customerEmiStatus === 'Yes'"
+              class="fa fa-check-square fa-lg pl-2"
+              title="Yes"
+              style="color: red"
+              aria-hidden="true"
+            ></i>
+            <i
+              v-if="data.row.customerEmiStatus === 'No'"
+              class="fa fa-times-circle fa-lg pl-2 ml-1"
+              title="No"
+              style="color: rgb(50, 235, 50)"
+              aria-hidden="true"
+            ></i>
+          </span>
+          <span v-if="data.column.field === 'customerDefaulter'">
+            <i
+              v-if="data.row.customerDefaulter === 'Yes'"
+              class="fa fa-check-square fa-lg pl-2"
+              title="Yes"
+              style="color: red"
+              aria-hidden="true"
+            ></i>
+            <i
+              v-if="data.row.customerDefaulter === 'No'"
+              class="fa fa-times-circle fa-lg pl-2 ml-1"
+              title="No"
+              style="color: rgb(50, 235, 50)"
+              aria-hidden="true"
+            ></i>
+          </span>
+        </template>
+      </vue-good-table>
+    </div>
+    <div v-else>
+      <vue-good-table
+        :columns="columnsActive"
+        :rows="JSON.parse(this.$store.state.Customer.deletedCustomer)"
+        :line-numbers="true"
+        :rtl="false"
+        :sort-options="{
+          enabled: true,
+        }"
+        :search-options="{
+          enabled: true,
+          placeholder: 'Search this table',
+        }"
+        :pagination-options="{ enabled: true }"
+        styleClass="vgt-table striped condensed bordered"
+      >
+        <template slot="table-row" slot-scope="data">
+          <span style="font-size: 16px; color: #222222">
+            {{ data.formattedRow[data.column.field] }}
+          </span>
+          <span style="font-size: 1px">
+            {{ data.formattedRow[data.column.label] }}
+          </span>
+          <input
+            type="button"
+            value="View"
+            @click="myfun(data)"
+            class="btn btn-sm bg-primary text-light rounded"
             style="padding-left: 5px; padding-right: 5px"
             v-if="data.column.field === 'btn'"
           />
@@ -193,7 +280,13 @@ export default {
       "fetchCustomer",
       "fetchAllInActiveCustomer",
       "customerDefaulter",
+      "deleteCustomer",
     ]),
+
+    deleteFn(data) {
+      var uid = data.row.customerId;
+      this.deleteCustomer(uid);
+    },
     myfun(data) {
       var uid = data.row.customerId;
       this.fetchCustomer(uid);
@@ -219,19 +312,19 @@ export default {
         {
           label: "Customer Address",
           field: "customerAddress",
-          sortable: true,
+          sortable: false,
           tdClass: "text-left px-md-2",
         },
         {
           label: "Customer Mobile",
           field: "customerMobileNo",
-          sortable: true,
+          sortable: false,
           tdClass: "text-left px-md-2",
         },
         {
           label: "Product List - ( Total Count )",
           field: "customerProductsList",
-          sortable: true,
+          sortable: false,
           tdClass: "text-left px-md-2",
         },
         {
@@ -267,7 +360,7 @@ export default {
         },
 
         {
-          label: "View",
+          label: "Action",
           field: "btn",
           html: true,
           sortable: false,
@@ -306,5 +399,4 @@ export default {
   padding-right: 10px;
   justify-content: space-between;
 }
-
 </style>

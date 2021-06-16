@@ -24,6 +24,7 @@ const state = {
   customerDetails: null,
   activeCustomerDetails: null,
   inactiveCustomerDetails: null,
+  deletedCustomer: null,
   emiDetails: null,
   customerDetailsProduct: null,
   customerDetailsSales: null,
@@ -37,6 +38,9 @@ const getters = {
   },
   getActiveCustomerDetails: function(state) {
     return state.activeCustomerDetails;
+  },
+  getDeletedCustomer: function(state) {
+    return state.deletedCustomer;
   },
   getInActiveCustomerDetails: function(state) {
     return state.inactiveCustomerDetails;
@@ -67,6 +71,9 @@ const mutations = {
   },
   setInActiveCustomerDetails: function(state, inactiveCustomerDetails) {
     state.inactiveCustomerDetails = inactiveCustomerDetails;
+  },
+  setDeletedCustomer: function(state, deletedCustomer) {
+    state.deletedCustomer = deletedCustomer;
   },
   setEmiDetails: function(state, emiDetails) {
     state.emiDetails = emiDetails;
@@ -296,11 +303,9 @@ const actions = {
   },
 
   async customerDefaulter({ dispatch, rootState }) {
-    await dashboardApi
-      .customerDefaulter(rootState.Login.token)
-      .catch((err) => {
-        dispatch("handleException", err.response, { root: true });
-      });
+    await dashboardApi.customerDefaulter(rootState.Login.token).catch((err) => {
+      dispatch("handleException", err.response, { root: true });
+    });
   },
 
   async fetchCustomerByMonth(
@@ -349,6 +354,83 @@ const actions = {
 
   async setSalesDate({ commit }, productMonthYear) {
     commit("setSalesDate", productMonthYear);
+  },
+
+  async deleteCustomer({ dispatch, rootState }, customerId) {
+    await dashboardApi
+      .deleteCustomer(rootState.Login.token, customerId)
+      .then((response) => {
+        if (response.status === 200 && response.data) {
+          dispatch("fetchAllDeletedCustomer");
+          dispatch("fetchAllActiveCustomer");
+          dispatch("fetchAllInActiveCustomer");
+        } else {
+          Toast.showToast("Something went wrong", "E");
+        }
+      })
+      .catch((err) => {
+        dispatch("handleException", err.response, { root: true });
+      });
+  },
+
+  async updateDeletedCustomer({ dispatch, rootState }, customerId) {
+    await dashboardApi
+      .updateDeletedCustomer(rootState.Login.token, customerId)
+      .then((response) => {
+        if (response.status === 200 && response.data) {
+          dispatch("fetchAllDeletedCustomer");
+        } else {
+          Toast.showToast("Something went wrong", "E");
+        }
+      })
+      .catch((err) => {
+        dispatch("handleException", err.response, { root: true });
+      });
+  },
+
+  async fetchAllDeletedCustomer({ commit, dispatch, rootState }) {
+    commit("setDeletedCustomer", null);
+    await dashboardApi
+      .fetchAllDeletedCustomer(rootState.Login.token)
+      .then((response) => {
+        if (response.status === 200 && response.data) {
+          if (response.data.length > 0) {
+            for (var i = 0; i < response.data.length; i++) {
+              if (response.data[i].customerEmiStartDate) {
+                response.data[i].customerEmiStartDate = formatDate(
+                  response.data[i].customerEmiStartDate
+                );
+              }
+              if (response.data[i].createdDate) {
+                response.data[i].createdDate = formatDate(
+                  response.data[i].createdDate
+                );
+              }
+              if (response.data[i].customerEmiEndDate) {
+                response.data[i].customerEmiEndDate = formatDate(
+                  response.data[i].customerEmiEndDate
+                );
+              }
+              if (response.data[i].customerDefaulter === true) {
+                response.data[i].customerDefaulter = "Yes";
+              } else if (response.data[i].customerDefaulter === false) {
+                response.data[i].customerDefaulter = "No";
+              }
+              if (response.data[i].customerEmiStatus === true) {
+                response.data[i].customerEmiStatus = "Yes";
+              } else if (response.data[i].customerEmiStatus === false) {
+                response.data[i].customerEmiStatus = "No";
+              }
+            }
+          }
+          commit("setDeletedCustomer", JSON.stringify(response.data));
+        } else {
+          commit("setDeletedCustomer", JSON.stringify({}));
+        }
+      })
+      .catch((err) => {
+        dispatch("handleException", err.response, { root: true });
+      });
   },
 };
 

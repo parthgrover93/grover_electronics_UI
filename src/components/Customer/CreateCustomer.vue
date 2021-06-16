@@ -87,6 +87,7 @@ export default {
         customerFanCount: 0,
         customerStatus: true,
         customerBillNumber: "",
+        customerDeleted:false,
       },
       schema: CreateEditCustomerSchema.getSchemaData(false),
       formOptions: {
